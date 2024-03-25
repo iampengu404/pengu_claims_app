@@ -135,7 +135,7 @@ export default {
       }
 
       if (this.nfts.length < 1) {
-        this.message = `Sorry, your ${this.currentCollection }s don't have the required traits 😔`
+        this.message = `Sorry, no ${this.currentCollection }s or required traits found 😔`
       } else {
         this.save()
       }
