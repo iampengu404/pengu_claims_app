@@ -58,7 +58,6 @@ export default {
       currentCollection: import.meta.env.VITE_COLLECTION_NAME,
       message: null,
       searching: false,
-      sheet_id: '1gl8WYLmfoBOPEgOYqKEErhr5fMjkbUAnvWWSaGdOMEc'
     }
   },
   methods: {
@@ -67,6 +66,8 @@ export default {
     },
     async save() {
       // Save to Sheets
+      const res = await axios.get(`/api/sheets?address=${this.ownerAddress}`)
+      console.log(res.data)
       this.message = "Contgrats! You'll be receiving $PENGU airdrops soon. 🐟"
     },
     traitChecker(traits) {
