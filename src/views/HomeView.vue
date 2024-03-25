@@ -5,7 +5,7 @@
       <div class="topnav"><div class="logo_desktop"><a href="https://www.pengufoods.xyz"><img src="https://assets-global.website-files.com/65ce4b6e0ff5b1cccd696736/65ce986adaf1eb97e936d747_logo_header.svg" loading="lazy" width="Auto" height="50" alt=""></a></div><div class="nav_buttons"><a href="https://opensea.io/collection/pengu-foods" target="_blank" class="topnav_links w-inline-block"><img src="https://assets-global.website-files.com/65ce4b6e0ff5b1cccd696736/65cfcfcbd533ed5832267bca_opensea.svg" loading="lazy" width="40" height="Auto" alt=""></a></div></div>
       <div class="div_hero">
         <div class="heading_shadow_hero">Claim PENGU FOODS!</div>
-        <button @click="save()">Save</button>
+
         <div><img src="https://assets-global.website-files.com/65ce4b6e0ff5b1cccd696736/65cf8efed38587746f48c037_orange.png" width="186" class="float"></div>
 
         <div class="info">Simply enter your wallet address and if you own a {{ currentCollection }} with specic traits, you will receive $PENGU at the time of the airdrop.</div>
@@ -39,14 +39,12 @@
 <script>
 import axios from 'axios'
 import _ from 'lodash'
-import { google } from 'googleapis'
 
 export default {
   data() {
     return {
       ownerAddress: null,
       nfts: [],
-      currentTrait: import.meta.env.VITE_TRAIT,
       eligableTraits: [
         'Wizard Hat',
         'Bowl Cut',
@@ -69,19 +67,6 @@ export default {
     },
     async save() {
       // Save to Sheets
-      const client = new google.auth.JWT(import.meta.env.CLIENT_EMAIL, null, import.meta.env.VITE_PRIVATE_KEY, ['https://www.googleapis.com/auth/spreadsheets'])
-      const sheet = google.sheets({ version: 'v4', auth: client})
-      await sheet.spreadsheets.values.append({
-        spreadsheet_id: this.sheet_id,
-        range: 'Addresses!A2:B',
-        insertDataOption: 'INSERT_ROWS',
-        valueInputOption: 'RAW',
-        requestBody: {
-          values: [[ this.ownerAddress, 'Today' ]]
-        }
-      })
-
-
       this.message = "Contgrats! You'll be receiving $PENGU airdrops soon. 🐟"
     },
     traitChecker(traits) {
