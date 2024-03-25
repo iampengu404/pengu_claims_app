@@ -39,6 +39,7 @@
 <script>
 import axios from 'axios'
 import _ from 'lodash'
+import { isAddress } from 'web3-validator'
 
 export default {
   data() {
@@ -97,6 +98,12 @@ export default {
       this.notFound = false
       this.searching = true
       this.message = null
+
+      if (!isAddress(this.ownerAddress)) {
+        this.message = 'Invalid wallet address'
+        this.searching = false
+        return
+      }
 
       const url = `https://api.opensea.io/api/v2/chain/ethereum/account/${this.ownerAddress}/nfts?collection=${import.meta.env.VITE_COLLECTION_SLUG}`
       const res = await axios.get(url, { headers: { 'x-api-key': import.meta.env.VITE_OS_KEY } })
