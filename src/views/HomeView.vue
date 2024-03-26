@@ -8,7 +8,7 @@
 
         <div><img src="https://assets-global.website-files.com/65ce4b6e0ff5b1cccd696736/65cf8efed38587746f48c037_orange.png" width="186" class="float"></div>
 
-        <div class="info">Simply enter your wallet address and if you own a {{ currentCollection }} with specic traits, you will receive $PENGU at the time of the airdrop.</div>
+        <div class="info">Simply enter your wallet address and if you own a {{ currentCollection }} with specific traits, you will receive $PENGU at the time of the airdrop.</div>
         <div class="traits">* Eligable Head traits: Wizard Hat, Bowl Cut, Rice Hat, None, Pirate Hat, Backwards Hat Blue, Viking Helmet, Biker Helmet</div>
         <div class="form">
           <div><input type="text" placeholder="Enter wallet address (0x...)" v-model="ownerAddress"></div>
@@ -233,6 +233,7 @@ body {
 
 .traits {
   font-weight: 600;
+  margin-top: 10px;
 }
 
 input {
