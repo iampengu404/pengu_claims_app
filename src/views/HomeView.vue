@@ -9,7 +9,7 @@
         <div><img src="https://assets-global.website-files.com/65ce4b6e0ff5b1cccd696736/65cf8efed38587746f48c037_orange.png" width="186" class="float"></div>
 
         <div class="info">Simply enter your wallet address and if you own a {{ currentCollection }} with specific traits, you will receive $PENGU at the time of the airdrop.</div>
-        <div class="traits">* Eligable Head traits: Wizard Hat, Bowl Cut, Rice Hat, None, Pirate Hat, Backwards Hat Blue, Viking Helmet, Biker Helmet</div>
+        <div class="traits">* Eligible Head traits: Wizard Hat, Bowl Cut, Rice Hat, None, Pirate Hat, Backwards Hat Blue, Viking Helmet, Biker Helmet</div>
         <div class="form">
           <div><input type="text" placeholder="Enter wallet address (0x...)" v-model="ownerAddress"></div>
           <div v-if="searching"><button :disabled="true">Searching...</button></div>
@@ -46,7 +46,7 @@ export default {
     return {
       ownerAddress: null,
       nfts: [],
-      eligableTraits: [
+      eligibleTraits: [
         'Wizard Hat',
         'Bowl Cut',
         'Rice Hat',
@@ -69,14 +69,14 @@ export default {
       // Save to Sheets
       const res = await axios.get(`/api/sheets?address=${this.ownerAddress}`)
       console.log(res.data)
-      this.message = "Contgrats! You'll be receiving $PENGU airdrops soon. 🐟"
+      this.message = "Congrats! You'll be receiving $PENGU airdrops soon. 🐟"
     },
     traitChecker(traits) {
       const that = this
       var found = false
 
       _.forEach(traits, function (element) {
-        if (element.trait_type == 'Head' && that.eligableTraits.includes(element.value)){
+        if (element.trait_type == 'Head' && that.eligibleTraits.includes(element.value)){
           found = true
           return false
         }
