@@ -8,7 +8,7 @@
 
         <div><img src="https://assets-global.website-files.com/65ce4b6e0ff5b1cccd696736/65cf8efed38587746f48c037_orange.png" width="186" class="float"></div>
 
-        <div class="info">Simply enter your wallet address and if you own a {{ currentCollection }}, you will receive $PENGU at the time of the airdrop.</div>
+        <div class="info">Simply enter your wallet address and if you own a Pudgy Penguin, you will receive $PENGU at the time of the airdrop.</div>
 
         <div class="form">
           <div><input type="text" placeholder="Enter wallet address (0x...)" v-model="ownerAddress"></div>
@@ -38,21 +38,10 @@ export default {
   data() {
     return {
       ownerAddress: null,
-      nfts: [],
-      eligibleTraits: [
-        'Wizard Hat',
-        'Bowl Cut',
-        'Rice Hat',
-        'None',
-        'Pirate Hat',
-        'Backwards Hat Blue',
-        'Viking Helmet',
-        'Biker Helmet',
-      ],
-      currentCollection: import.meta.env.VITE_COLLECTION_NAME,
       message: null,
       searching: false,
-      lilpudgiesAddress: '0x524cab2ec69124574082676e6f654a18df49a048'
+      // pudgiesSlugs: ['pudgypenguins', 'lilpudgys', 'pudgyrods'],
+      pudgiesSlugs: ['pudgypenguins'],
     }
   },
   methods: {
@@ -62,36 +51,19 @@ export default {
     async save() {
       // Save to Sheets
       const res = await axios.get(`/api/sheets?address=${this.ownerAddress}`)
-      console.log(res.data)
       this.message = "Congrats! You'll be receiving $PENGU airdrops soon. 🐟"
     },
-    traitChecker(traits) {
-      const that = this
-      var found = false
-
-      _.forEach(traits, function (element) {
-        if (element.trait_type == 'Head' && that.eligibleTraits.includes(element.value)){
-          found = true
-          return false
-        }
-      })
-
-      if (found) {
-        return true
-      }
-
-      return false
-    },
-    async fetchOsData(tokenId) {
-      const url = `https://api.opensea.io/api/v2/chain/ethereum/contract/0xbd3531da5cf5857e7cfaa92426877b022e612cf8/nfts/${tokenId}`
+    async getOwnedByCollection(collection_slug) {
+      await this.sleep(3000);
+      const url = `https://api.opensea.io/api/v2/chain/ethereum/account/${this.ownerAddress}/nfts?collection=${collection_slug}`
       const res = await axios.get(url, { headers: { 'x-api-key': import.meta.env.VITE_OS_KEY } })
-      return res.data.nft
+      return res.data.nfts
     },
     async getOwnedTokens() {
-      this.nfts = []
-      this.notFound = false
+      const that = this
       this.searching = true
       this.message = null
+      var foundNfts = false
 
       if (!isAddress(this.ownerAddress)) {
         this.message = 'Invalid wallet address'
@@ -99,43 +71,25 @@ export default {
         return
       }
 
-      const url = `https://api.opensea.io/api/v2/chain/ethereum/account/${this.ownerAddress}/nfts?collection=${import.meta.env.VITE_COLLECTION_SLUG}`
-      const res = await axios.get(url, { headers: { 'x-api-key': import.meta.env.VITE_OS_KEY } })
-      const nfts = res.data.nfts
-      
-      // for (let i = 0; i < nfts.length; i++) {
-      //   const tokenId = nfts[i].identifier
-      //   const name = nfts[i].name
-      //   const image_url = `https://storage.googleapis.com/nftimagebucket/tokens/0xbd3531da5cf5857e7cfaa92426877b022e612cf8/${tokenId}.png`
+      // loop through all collections. Exit as soon as found
+      for (var slug of this.pudgiesSlugs) {
+        this.message = `Checking ${slug}...`
+        var nfts = await that.getOwnedByCollection(slug)
 
-      //   await this.sleep(3000);
-      //   // var osData = await this.fetchOsData(tokenId)
+        if (nfts.length > 0) {
+          console.log('Found', slug)
+          foundNfts = true
+          await this.save()
+          break;
+        }
+      }
 
-      //   // var traits = osData.traits
-      //   // var image_url = osData.image_url
-      //   // var name = osData.name
-
-      //   // var traitExists = this.traitChecker(traits)
-
-      //   this.nfts.push(
-      //     {
-      //       id: tokenId,
-      //       img_url: image_url,
-      //       name: name
-      //     }
-      //   )
-      // }
-
-      if (nfts.length < 1) {
-        this.message = `Sorry, no ${this.currentCollection }s found 😔`
-      } else {
-        await this.save()
+      if (!foundNfts) {
+        this.message = `Sorry, no NFTs found 😔`  
       }
 
       this.searching = false
     }
-  },
-  mounted() {
   }
 }
 
