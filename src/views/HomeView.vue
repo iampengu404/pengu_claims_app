@@ -8,8 +8,8 @@
 
         <div><img src="https://assets-global.website-files.com/65ce4b6e0ff5b1cccd696736/65cf8efed38587746f48c037_orange.png" width="186" class="float"></div>
 
-        <div class="info">Simply enter your wallet address and if you own a {{ currentCollection }} with specific traits, you will receive $PENGU at the time of the airdrop.</div>
-        <div class="traits">* Eligible Head traits: Wizard Hat, Bowl Cut, Rice Hat, None, Pirate Hat, Backwards Hat Blue, Viking Helmet, Biker Helmet</div>
+        <div class="info">Simply enter your wallet address and if you own a {{ currentCollection }}, you will receive $PENGU at the time of the airdrop.</div>
+
         <div class="form">
           <div><input type="text" placeholder="Enter wallet address (0x...)" v-model="ownerAddress"></div>
           <div v-if="searching"><button :disabled="true">Searching...</button></div>
@@ -111,31 +111,29 @@ export default {
       
       for (let i = 0; i < nfts.length; i++) {
         const tokenId = nfts[i].identifier
+        const name = nfts[i].name
+        const image_url = `https://storage.googleapis.com/nftimagebucket/tokens/0xbd3531da5cf5857e7cfaa92426877b022e612cf8/${tokenId}.png`
 
         await this.sleep(3000);
-        var osData = await this.fetchOsData(tokenId)
+        // var osData = await this.fetchOsData(tokenId)
 
-        var traits = osData.traits
-        var image_url = osData.image_url
-        var name = osData.name
+        // var traits = osData.traits
+        // var image_url = osData.image_url
+        // var name = osData.name
 
-        var traitExists = this.traitChecker(traits)
+        // var traitExists = this.traitChecker(traits)
 
-        if (traitExists) {
-
-          this.nfts.push(
-            {
-              id: tokenId,
-              traits: traits,
-              img_url: image_url,
-              name: name
-            }
-          )
-        }
+        this.nfts.push(
+          {
+            id: tokenId,
+            img_url: image_url,
+            name: name
+          }
+        )
       }
 
       if (this.nfts.length < 1) {
-        this.message = `Sorry, no ${this.currentCollection }s or required traits found 😔`
+        this.message = `Sorry, no ${this.currentCollection }s found 😔`
       } else {
         this.save()
       }

@@ -27,3 +27,8 @@ npm run dev
 ```sh
 npm run build
 ```
+
+### Local Vercel env
+```sh
+vercel dev
+```
