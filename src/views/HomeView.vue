@@ -8,7 +8,7 @@
 
         <div><img src="https://assets-global.website-files.com/65ce4b6e0ff5b1cccd696736/65cf8efed38587746f48c037_orange.png" width="186" class="float"></div>
 
-        <div class="info">Simply enter your wallet address and if you own a Pudgy Penguin, you will receive $PENGU at the time of the airdrop.</div>
+        <div class="info">Simply enter your wallet address and if you own either <u>Pudgy Penguins</u>, <u>Lil Pudgys</u>, or <u>Pudgy Rods</u>, you will receive $PENGU at the time of the airdrop.</div>
 
         <div class="form">
           <div><input type="text" placeholder="Enter wallet address (0x...)" v-model="ownerAddress"></div>
@@ -40,8 +40,12 @@ export default {
       ownerAddress: null,
       message: null,
       searching: false,
-      // pudgiesSlugs: ['pudgypenguins', 'lilpudgys', 'pudgyrods'],
-      pudgiesSlugs: ['pudgypenguins'],
+      pudgiesSlugs: ['pudgypenguins', 'lilpudgys', 'pudgyrods'],
+      nameLookup: {
+        pudgypenguins: 'Pudgy Penguins',
+        lilpudgys: 'Lil Pudgys',
+        pudgyrods: 'Pudgy Rods'
+      }
     }
   },
   methods: {
@@ -54,8 +58,9 @@ export default {
       this.message = "Congrats! You'll be receiving $PENGU airdrops soon. 🐟"
     },
     async getOwnedByCollection(collection_slug) {
+      // throttle requests and limit to 1 record only for performance
       await this.sleep(3000);
-      const url = `https://api.opensea.io/api/v2/chain/ethereum/account/${this.ownerAddress}/nfts?collection=${collection_slug}`
+      const url = `https://api.opensea.io/api/v2/chain/ethereum/account/${this.ownerAddress}/nfts?collection=${collection_slug}&limit=1`
       const res = await axios.get(url, { headers: { 'x-api-key': import.meta.env.VITE_OS_KEY } })
       return res.data.nfts
     },
@@ -73,7 +78,7 @@ export default {
 
       // loop through all collections. Exit as soon as found
       for (var slug of this.pudgiesSlugs) {
-        this.message = `Checking ${slug}...`
+        this.message = `Checking ${this.nameLookup[slug]}...`
         var nfts = await that.getOwnedByCollection(slug)
 
         if (nfts.length > 0) {
