@@ -16,13 +16,6 @@
           <div v-else><button @click="getOwnedTokens()">GO</button></div>
         </div>
         <div class="message" v-if="message">{{ message }}</div>
-        <div v-if="nfts.length">
-          <div class="nfts" v-for="nft in nfts">
-            <div>
-              <img class="nft_img" :src="nft.img_url" width="100"/>
-            </div>
-          </div>
-        </div>
 
       </div>
     </div>
@@ -59,6 +52,7 @@ export default {
       currentCollection: import.meta.env.VITE_COLLECTION_NAME,
       message: null,
       searching: false,
+      lilpudgiesAddress: '0x524cab2ec69124574082676e6f654a18df49a048'
     }
   },
   methods: {
@@ -109,33 +103,33 @@ export default {
       const res = await axios.get(url, { headers: { 'x-api-key': import.meta.env.VITE_OS_KEY } })
       const nfts = res.data.nfts
       
-      for (let i = 0; i < nfts.length; i++) {
-        const tokenId = nfts[i].identifier
-        const name = nfts[i].name
-        const image_url = `https://storage.googleapis.com/nftimagebucket/tokens/0xbd3531da5cf5857e7cfaa92426877b022e612cf8/${tokenId}.png`
+      // for (let i = 0; i < nfts.length; i++) {
+      //   const tokenId = nfts[i].identifier
+      //   const name = nfts[i].name
+      //   const image_url = `https://storage.googleapis.com/nftimagebucket/tokens/0xbd3531da5cf5857e7cfaa92426877b022e612cf8/${tokenId}.png`
 
-        await this.sleep(3000);
-        // var osData = await this.fetchOsData(tokenId)
+      //   await this.sleep(3000);
+      //   // var osData = await this.fetchOsData(tokenId)
 
-        // var traits = osData.traits
-        // var image_url = osData.image_url
-        // var name = osData.name
+      //   // var traits = osData.traits
+      //   // var image_url = osData.image_url
+      //   // var name = osData.name
 
-        // var traitExists = this.traitChecker(traits)
+      //   // var traitExists = this.traitChecker(traits)
 
-        this.nfts.push(
-          {
-            id: tokenId,
-            img_url: image_url,
-            name: name
-          }
-        )
-      }
+      //   this.nfts.push(
+      //     {
+      //       id: tokenId,
+      //       img_url: image_url,
+      //       name: name
+      //     }
+      //   )
+      // }
 
-      if (this.nfts.length < 1) {
+      if (nfts.length < 1) {
         this.message = `Sorry, no ${this.currentCollection }s found 😔`
       } else {
-        this.save()
+        await this.save()
       }
 
       this.searching = false
