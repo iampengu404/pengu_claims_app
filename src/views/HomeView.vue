@@ -4,17 +4,13 @@
     <div class="hero">
       <div class="topnav"><div class="logo_desktop"><a href="https://www.pengufoods.xyz"><img src="https://assets-global.website-files.com/65ce4b6e0ff5b1cccd696736/65ce986adaf1eb97e936d747_logo_header.svg" loading="lazy" width="Auto" height="50" alt=""></a></div><div class="nav_buttons"><a href="https://opensea.io/collection/pengu-foods" target="_blank" class="topnav_links w-inline-block"><img src="https://assets-global.website-files.com/65ce4b6e0ff5b1cccd696736/65cfcfcbd533ed5832267bca_opensea.svg" loading="lazy" width="40" height="Auto" alt=""></a></div></div>
       <div class="div_hero">
-        <div class="heading_shadow_hero">Claim PENGU FOODS!</div>
+        
 
         <div><img src="https://assets-global.website-files.com/65ce4b6e0ff5b1cccd696736/65cf8efed38587746f48c037_orange.png" width="186" class="float"></div>
 
-        <div class="info">Simply enter your wallet address and if you own either <u>Pudgy Penguins</u>, <u>Lil Pudgys</u>, or <u>Pudgy Rods</u>, you will receive $PENGU at the time of the airdrop.</div>
+        <div class="info">Claims have now ended.</div>
 
-        <div class="form">
-          <div><input type="text" placeholder="Enter wallet address (0x...)" v-model="ownerAddress"></div>
-          <div v-if="searching"><button :disabled="true">Searching...</button></div>
-          <div v-else><button @click="getOwnedTokens()">GO</button></div>
-        </div>
+        
         <div class="message" v-if="message">{{ message }}</div>
 
       </div>
